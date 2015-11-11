@@ -1,11 +1,12 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>My Angular App!</title>
+    <script src="/lib/angular.min.js"></script>
+    <script src="/javascripts/angularApp.js"></script>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <body ng-app="mainApp" ng-controller="MainCtrl">
+    <div>
+      {{test}}
+    </div>
   </body>
 </html>
