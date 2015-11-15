@@ -5,40 +5,40 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-scss-lint');
+  grunt.loadNpmTasks('grunt-sass-lint');
 
   grunt.registerTask('makeClient', ['clean', 'lintClient', 'uglify:clientJavascript', 'sass' ]);
   grunt.registerTask('make', ['makeClient']);
-  grunt.registerTask('lintClient', ['jshint:clientJavascript', 'scsslint']);
+  grunt.registerTask('lintClient', ['jshint:clientJavascript', 'sasslint']);
   grunt.registerTask('lintServer', ['jshint:serverJavascript']);
-  grunt.registerTask('lint', ['jshint', 'scsslint']);
+  grunt.registerTask('lint', ['lintClient', 'lintServer']);
   grunt.registerTask('default', ['watch']);
 
   grunt.initConfig({
 
     watch: {
       gruntfile: {
-        files: 'Gruntfile.js',
+        files: ['Gruntfile.js'],
         tasks: ['jshint:gruntfile']
       },
 
       clientJavascript: {
-        files: 'client/javascripts/**/*.js',
-        tasks: ['jshint:clientJavascript']
+        files: ['public/javascripts/**/*.js', '!**/*.min.js'],
+        tasks: ['clean:clientJavascript', 'jshint:clientJavascript', 'uglify:clientJavascript']
       },
 
       clientStylesheets: {
-        files: 'client/stylesheets/**/*.scss',
-        tasks: ['scsslint:clientStylesheets']
+        files: ['public/stylesheets/**/*.scss', '!**/*.min.css'],
+        tasks: ['clean:clientStylesheets', 'sasslint', 'sass']
       },
 
       serverJavascript: {
-        files: ['routes/**/*.js', 'test/**/*.js', 'models/**/*.js' ],
+        files: ['routes/**/*.js', 'test/**/*.js', 'models/**/*.js', '!**/*.min.js'],
         tasks: ['jshint:serverJavascript']
       },
 
       tests: {
-        files: ['test/**/*.js'],
+        files: ['test/**/*.js', '!**/*.min.js'],
         tasks: ['jshint:tests']
       }//,
 
@@ -53,7 +53,8 @@ module.exports = function(grunt) {
       options: {
         globals: {
           _: true
-        }
+        },
+        ignores: ['*.min.js']
       },
       gruntfile: {
         files: {
@@ -95,7 +96,8 @@ module.exports = function(grunt) {
     },
 
     clean: {
-        client: ['public/javascripts/**/*.min.js', 'public/javascripts/**/*.map', 'public/stylesheets/**/*.min.css', 'public/stylesheets/**/*.map']
+        clientJavascript: ['public/javascripts/**/*.min.js', 'public/javascripts/**/*.map', ],
+        clientStylesheets: ['public/stylesheets/**/*.min.css', 'public/stylesheets/**/*.map' ]
     },
 
     sass: {
@@ -110,13 +112,8 @@ module.exports = function(grunt) {
       }
     },
 
-    scsslint: {
-      clientStylesheets: [
-        'public/stylesheets/**/*.scss',
-      ],
-      options: {
-        colorizeOutput: true
-      }
+    sasslint: {
+        target: ['public/stylesheets/**/*.scss']
     }
 
   });
