@@ -8,9 +8,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-scss-lint');
 
-  grunt.registerTask('makeClient', ['clean', 'jshint:clientJavascript', 'uglify:clientJavascript', 'sass', 'cssmin', 'clean:temp']);
-  grunt.registerTask('makeClientDev', ['clean', 'jshint:clientJavascript', 'concat:clientJavascript', 'sass', 'copy:clientJavascript', 'copy:clientStylesheets', /*'clean:temp'*/]);
+  grunt.registerTask('makeClient', ['clean', 'jshint:clientJavascript', 'scsslint', 'uglify:clientJavascript', 'sass', 'cssmin', 'clean:temp']);
+  grunt.registerTask('makeClientDev', ['clean', 'jshint:clientJavascript', 'scsslint', 'concat:clientJavascript', 'sass', 'copy:clientJavascript', 'copy:clientStylesheets', /*'clean:temp'*/]);
   grunt.registerTask('default', ['jshint']);
 
   grunt.initConfig({
@@ -68,10 +69,6 @@ module.exports = function(grunt) {
 
     uglify: {
       clientJavascript: {
-        options: {
-            mangleProperties: true,
-            reserveDOMCache: true
-        },
         files: {
           'public/build/client/javascripts/script.js': ['client/javascripts/**/*.js']
         }
@@ -129,6 +126,15 @@ module.exports = function(grunt) {
       clientJavascript: {
         src: 'client/javascripts/**/*.js',
         dest: 'temp/client/javascripts/script.js'
+      }
+    },
+
+    scsslint: {
+      clientStylesheets: [
+        'client/stylesheets/**/*.scss',
+      ],
+      options: {
+        colorizeOutput: true
       }
     }
 
