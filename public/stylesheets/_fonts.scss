@@ -1,0 +1,17 @@
+@mixin font {
+  font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+@mixin header-font {
+  @include font;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+@mixin title-font {
+  @include header-font;
+  font-size: 1.5em;
+  font-weight: normal;
+}

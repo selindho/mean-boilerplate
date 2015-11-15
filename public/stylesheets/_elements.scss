@@ -1,0 +1,33 @@
+@import 'colors';
+@import 'fonts';
+@import 'dimensions';
+
+body {
+  @include font;
+  align-items: center;
+  background-color: $color-background-light;
+  color: $color-text-dark;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  margin: 0;
+  width: 100%;
+}
+
+main {
+  max-width: 1024px;
+  position: relative;
+  top: 3.5em;
+  width: 100%;
+}
+
+section {
+  background-color: $color-background-dark;
+
+  header {
+    @include header-font;
+    background-color: $color-low-tone;
+    color: $color-text-light;
+    padding: $padding-standard;
+  }
+}

@@ -1,0 +1,5 @@
+@import 'colors';
+
+@mixin box-shadow-standard {
+  box-shadow: 0 2px 5px 0 $color-shadow;
+}

@@ -1,0 +1,26 @@
+@import 'colors';
+@import 'fonts';
+@import 'dimensions';
+@import 'shadows';
+
+.header-bar {
+  @include box-shadow-standard;
+  align-items: center;
+  background-color: $color-base-tone;
+  color: $color-text-light;
+  display: flex;
+  height: 3.5em;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: $z-overlay;
+
+  > * {
+    padding: $padding-standard;
+  }
+
+  > header {
+    @include title-font;
+    flex: 1 0 auto;
+  }
+}
