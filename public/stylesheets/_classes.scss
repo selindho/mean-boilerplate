@@ -24,3 +24,34 @@
     flex: 1 0 auto;
   }
 }
+
+.list {
+  align-items: stretch;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  padding: $padding-standard;
+}
+
+.list-element {
+  flex: 1 0 auto;
+  padding-bottom: .5em;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+}
+
+.post {
+  
+  .title {
+    font-weight: bold;
+    padding-bottom: .2em;
+  }
+
+  .upvotes {
+    font-style: italic;
+  }
+
+}

@@ -15,6 +15,10 @@ body {
 }
 
 main {
+  align-items: stretch;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
   max-width: 1024px;
   position: relative;
   top: 3.5em;
@@ -24,10 +28,16 @@ main {
 section {
   background-color: $color-background-dark;
 
+
   header {
     @include header-font;
     background-color: $color-low-tone;
     color: $color-text-light;
     padding: $padding-standard;
   }
+}
+
+form {
+  margin: 0;
+  padding: $padding-standard;
 }
