@@ -17,7 +17,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
 
     watch: {
-      gruntfile: {
+      root: {
         files: ['Gruntfile.js'],
         tasks: ['jshint:gruntfile']
       },
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
       },
 
       serverJavascript: {
-        files: ['routes/**/*.js', 'test/**/*.js', 'models/**/*.js', '!**/*.min.js'],
+        files: ['app.js', 'routes/**/*.js', 'test/**/*.js', 'models/**/*.js', '!**/*.min.js'],
         tasks: ['jshint:serverJavascript']
       },
 
@@ -74,7 +74,7 @@ module.exports = function(grunt) {
       },
       serverJavascript: {
         files: {
-            src: ['routes/**/*.js', 'models/**/*.js']
+            src: ['app.js', 'routes/**/*.js', 'models/**/*.js']
         }
       },
       tests: {

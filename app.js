@@ -4,10 +4,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var compression = require('compression')
-
+var compression = require('compression');
+var mongoose = require('mongoose');
 var routes = require('./routes/index');
 var users = require('./routes/users');
+
+// Database setup
+mongoose.connect('mongodb://localhost/mean');
+mongoose.connection.on('error', console.error.bind(console, 'Connection to DB failed.'));
+mongoose.connection.once('open', function() {
+  console.log( 'Connection to DB opened successfully.');
+  require('./models/Post');
+  require('./models/Comments');
+} );
+
 
 var app = express();
 
@@ -23,7 +33,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use('/', routes);
 app.use('/users', users);
 
@@ -57,6 +66,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
