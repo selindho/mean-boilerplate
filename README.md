@@ -3,10 +3,9 @@ MEAN Boilerplate
 
 Info
 ----
-MEAN is a technology stack consisting of:
+A tutorial project using the MEAN stack.
+MEAN consists of:
 - MongoDB
 - AngularJS
 - Express
 - Node
-
-This project serves as a template for creating a MEAN project (WIP).

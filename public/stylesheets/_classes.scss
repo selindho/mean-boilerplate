@@ -23,6 +23,16 @@
     @include title-font;
     flex: 1 0 auto;
   }
+
+  > nav {
+    background: transparent url('/images/menu_light.svg') no-repeat center center;
+    background-size: contain;
+    flex: 0 0 auto;
+    height: 1.5em;
+    margin: 1em;
+    padding: 0;
+    width: 1.5em;
+  }
 }
 
 .list {
@@ -44,7 +54,7 @@
 }
 
 .post {
-  
+
   .title {
     font-weight: bold;
     padding-bottom: .2em;
