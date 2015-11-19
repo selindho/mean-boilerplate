@@ -1,18 +1,44 @@
 ( function(){
+  'use strict';
 
-  var app = angular.module('mainApp', []);
+  angular.module('mainApp', ['ui.router'])
 
-  app.controller('MainCtrl', [
-    '$scope',
-    function($scope){
+  .config([
+    '$stateProvider', '$urlRouterProvider',
+    function($stateProvider, $urlRouterProvider) {
+
+      $stateProvider.state( 'posts', {
+        url: '/posts',
+        templateUrl: 'views/_posts.html',
+        controller: 'PostsController'
+      }).state( 'post', {
+        url: '/posts/{id}',
+        templateUrl: 'views/_post.html',
+        controller: 'PostController'
+      });
+
+      $urlRouterProvider.otherwise('posts');
+
+    }
+  ])
+
+  .service('PostsService', [function(){
+    this.posts = [
+      {
+        title:'Derp.',
+        link:'Hurp.',
+        upvotes: 12,
+        comments: []
+      }
+    ];
+  }])
+
+  .controller('PostsController', [
+    '$scope', '$stateParams', 'PostsService',
+    function($scope,$stateParams,PostsService){
+
       $scope.test = 'Hello world!';
-      $scope.posts = [
-        {title: 'post 1', upvotes: 5},
-        {title: 'post 2', upvotes: 2},
-        {title: 'post 3', upvotes: 15},
-        {title: 'post 4', upvotes: 9},
-        {title: 'post 5', upvotes: 4}
-      ];
+      $scope.posts = PostsService.posts;
 
       $scope.incrementUpvotes = function( post ) {
         post.upvotes++;
@@ -30,7 +56,12 @@
         $scope.title = '';
         $scope.link = '';
       };
+
     }
+  ])
+
+  .controller('PostController', [
+    '$scope', 'PostsService'
   ]);
 
 } )();

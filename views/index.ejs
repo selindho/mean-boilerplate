@@ -3,13 +3,14 @@
 <head>
   <title>MEAN Systems</title>
   <script src="/lib/angular.min.js"></script>
+  <script src="/lib/angular-ui-router.min.js"></script>
   <script src="/lib/jquery.min.js"></script>
   <script src="/lib/underscore-min.js"></script>
   <script src="/javascripts/script.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/stylesheets/style.min.css">
 </head>
 
-<body ng-app="mainApp" ng-controller="MainCtrl">
+<body ng-app="mainApp">
 
   <div class="header-bar">
     <header>MEAN Systems</header>
@@ -17,38 +18,7 @@
   </div>
 
   <main>
-
-    <section>
-
-      <header>Posts</header>
-
-      <div class="list">
-
-        <div class="list-element post" ng-repeat="post in posts | orderBy: '-upvotes'">
-
-          <div class="title">
-            <a ng-show="post.link" href="{{post.link}}">{{post.title}}</a>
-            <span ng-hide="post.link">{{post.title}}</span>
-          </div>
-
-          <div class="upvotes">
-            <span class="label">Upvotes:</span>
-            <span class="count">{{post.upvotes}}</span>
-            <span class="button" ng-click="incrementUpvotes(post)">+</span>
-          </div>
-
-        </div>
-
-      </div>
-
-      <form ng-submit="addPost()">
-        <input type="text" placeholder="Title" ng-model="title"></input>
-        <input type="text" placeholder="Link" ng-model="link"></input>
-        <button type="submit">Post</button>
-      </form>
-
-    </section>
-
+    <ui-view></ui-view>
   </main>
 
 </body>
