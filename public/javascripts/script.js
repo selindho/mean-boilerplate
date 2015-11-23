@@ -28,7 +28,11 @@
         title:'Derp.',
         link:'Hurp.',
         upvotes: 12,
-        comments: []
+        comments: [
+          {author: 'Derpling', body: 'HurrDurr!1..one', upvotes: -3},
+          {author: 'Zergling', body: 'ZergZergZerg', upvotes: 3},
+          {author: 'Anon', body: 'Very neccessary comment.', upvotes: 12}
+        ]
       }
     ];
   }])
@@ -61,7 +65,17 @@
   ])
 
   .controller('PostController', [
-    '$scope', 'PostsService'
+    '$scope', '$stateParams', 'PostsService',
+    function( $scope, $stateParams, PostsService ) {
+      var post = PostsService.posts[ $stateParams.id ];
+      $scope.post = post;
+      $scope.incrementUpvotes = function() {
+        post.upvotes++;
+      };
+      $scope.incrementCommentUpvotes = function( comment ) {
+        comment.upvotes++;
+      };
+    }
   ]);
 
 } )();
