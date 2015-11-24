@@ -4,64 +4,65 @@
 @import 'shadows';
 
 .header-bar {
-  @include box-shadow-standard;
-  align-items: center;
-  background-color: $color-base-tone;
-  color: $color-text-light;
-  display: flex;
-  height: $header-bar-height;
-  justify-content: space-between;
-  position: fixed;
-  width: 100%;
-  z-index: $z-overlay;
+    @include box-shadow-standard;
+    align-items: center;
+    background-color: $color-base-tone;
+    color: $color-text-light;
+    display: flex;
+    height: $header-bar-height;
+    justify-content: space-between;
+    position: fixed;
+    width: 100%;
+    z-index: $z-overlay;
 
-  > * {
-    padding: $padding-standard;
-  }
+    > * {
+        padding: $padding-standard;
+    }
 
-  > header {
-    @include title-font;
-    flex: 1 0 auto;
-  }
+    > header {
+        @include title-font;
+        flex: 1 0 auto;
+    }
 
-  > nav {
-    background: transparent url('/images/menu_light.svg') no-repeat center center;
-    background-size: contain;
-    flex: 0 0 auto;
-    height: 1.5em;
-    margin: 1em;
-    padding: 0;
-    width: 1.5em;
-  }
+    > nav {
+        background: transparent url('/images/menu_light.svg') no-repeat center center;
+        background-size: contain;
+        flex: 0 0 auto;
+        height: 1.5em;
+        margin: 1em;
+        padding: 0;
+        width: 1.5em;
+    }
 }
 
 .list {
-  align-items: stretch;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  padding: $padding-standard;
+    align-items: stretch;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    padding: $padding-standard;
 }
 
 .list-element {
-  flex: 1 0 auto;
-  padding-bottom: .5em;
+    flex: 1 0 auto;
+    padding-bottom: .5em;
 
-  &:last-child {
-    padding-bottom: 0;
-  }
+    &:last-child {
+        padding-bottom: 0;
+    }
 
 }
 
 .post {
+    padding: $padding-standard;
 
-  .title {
-    font-weight: bold;
-    padding-bottom: .2em;
-  }
+    .title {
+        font-weight: bold;
+        padding-bottom: .2em;
+    }
 
-  .upvotes {
-    font-style: italic;
-  }
+    .upvotes {
+        font-style: italic;
+    }
 
 }

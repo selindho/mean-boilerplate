@@ -3,35 +3,35 @@
 @import 'dimensions';
 
 body {
-  @include font;
-  background-color: $color-background-light;
-  color: $color-text-dark;
-  margin: 0;
-  width: 100%;
+    @include font;
+    background-color: $color-background-light;
+    color: $color-text-dark;
+    margin: 0;
+    width: 100%;
 }
 
 main {
-  align-items: center;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  position: relative;
-  top: $header-bar-height;
-  width: 100%;
+    align-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    position: relative;
+    top: $header-bar-height;
+    width: 100%;
 }
 
 section {
-  background-color: $color-background-dark;
+    background-color: $color-background-dark;
 
-  header {
-    @include header-font;
-    background-color: $color-low-tone;
-    color: $color-text-light;
-    padding: $padding-standard;
-  }
+    header {
+        @include header-font;
+        background-color: $color-low-tone;
+        color: $color-text-light;
+        padding: $padding-standard;
+    }
 }
 
 form {
-  margin: 0;
-  padding: $padding-standard;
+    margin: 0;
+    padding: $padding-standard;
 }
