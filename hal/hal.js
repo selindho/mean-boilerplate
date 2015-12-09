@@ -10,7 +10,6 @@ var ResourceBuilder = function( uri ){
     this._state = {};
     this._links = {};
     this._embedded = {};
-    this.link( { self: link( uri ) } );
 };
 
 _.extend( ResourceBuilder.prototype, {
@@ -121,17 +120,82 @@ _.extend( LinkBuilder.prototype, {
 
 } );
 
+var ResourceAssembler = function( options ) {
+    this.baseUri = options.baseUri;
+    this.identifier = options.identifier;
+    this.decorators = options.decorators || [];
+};
+
+_.extend( ResourceAssembler.prototype, {
+
+    resource: function( item ) {
+        var resource = builder( this.baseUri );
+        resource.link( { self: this.link( item ) } );
+        return _.reduce( this.decorators, function( memo, decorator ) {
+            return decorator( memo, item );
+        }, resource);
+    },
+
+    link: function( item ) {
+        return link( (
+            this.identifier ?
+            ( this.baseUri + '/' + item[ this.identifier ] ) :
+            this.baseUri
+        ), false );
+    },
+
+    decorator: function( deco ) {
+        if ( _.isArray( deco ) ) {
+            this.decorators = this.decorators.concat( deco );
+        }
+        else {
+            this.decorators.push( deco );
+        }
+        return this;
+    },
+
+    toString: function() {
+        return 'hal.ResourceAssembler';
+    }
+
+});
+
+var CollectionAssembler = function( options ) {
+    ResourceAssembler.call( this, options );
+    this.assembler = options.assembler;
+};
+
+_.extend( CollectionAssembler.prototype, ResourceAssembler.prototype, {
+
+    resource: function( resources ) {
+        var collectionResource = ResourceAssembler.prototype.resource.call( this, resources );
+        return collectionResource.state( {
+            size: resources.length,
+        } )
+        .link( {
+            resources: _.map( resources, _.bind( function( resource ) {
+                return this.assembler.link( resource );
+            }, this ) )
+        } );
+    },
+
+    toString: function() {
+        return 'hal.CollectionAssembler';
+    }
+
+});
+
 function response( req, res, next ) {
     res.hal = function( resourceBuilder ) {
-        res.type( 'application/hal+json');
+        res.type( 'application/hal+json' );
         res.send( JSON.stringify( resourceBuilder.build() ) );
     };
     next();
 }
 
 function filter( req, res, next ) {
-    if ( req.accepts( 'hal+json') ||
-        req.accepts( 'json') ) {
+    if ( req.accepts( 'hal+json' ) ||
+        req.accepts( 'json' ) ) {
         next();
     }
     else {
@@ -139,7 +203,15 @@ function filter( req, res, next ) {
     }
 }
 
-function resource( uri ) {
+function collection( opts ) {
+    return new CollectionAssembler( opts );
+}
+
+function resource( opts ) {
+    return new ResourceAssembler( opts );
+}
+
+function builder( uri ) {
     return new ResourceBuilder( uri );
 }
 
@@ -148,8 +220,10 @@ function link( href, templated ) {
 }
 
 module.exports = {
-    resource: resource,
-    link: link,
     response: response,
-    filter: filter
+    filter: filter,
+    collection: collection,
+    resource: resource,
+    builder: builder,
+    link: link
 };

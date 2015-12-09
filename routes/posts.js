@@ -4,21 +4,12 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 var when = require('when');
 var Post = mongoose.model('Post');
-var PostAssembler = require('../hal/PostAssembler');
-var CommentAssembler = require('../hal/CommentAssembler');
-var PostsAssembler = require('../hal/PostsAssembler');
-var CommentsAssembler = require('../hal/CommentsAssembler');
-
-// Instatiate assemblers
-commentAssembler = new CommentAssembler( '/api/comments' );
-postAssembler = new PostAssembler( '/api/posts', commentAssembler );
-postsAssembler = new PostsAssembler( '/api/posts', postAssembler );
+var assemble = require( './assemble' );
 
 ////
 // Posts
 ////
 router.param( 'post', function(req, res, next, id) {
-    console.log('Request with post param.');
     when( Post.findById( id ).exec() ).then(
         function( post ) {
             req.post = post;
@@ -27,10 +18,9 @@ router.param( 'post', function(req, res, next, id) {
 });
 
 router.get( '/', function(req,res,next) {
-    console.log( 'Posts:GET');
     when( Post.find().exec() ).then(
         function(posts) {
-            res.hal( postsAssembler.resource( posts ) );
+            res.hal( assemble.posts.resource( posts ) );
         }
     ).otherwise( next );
 });
@@ -39,7 +29,7 @@ router.post( '/', function(req, res, next) {
     var post = new Post(req.body);
     when( post.save() ).then(
         function(post){
-            res.hal( postAssembler.resource( post ) );
+            res.hal( assemble.post.resource( post ) );
         }
     ).otherwise( next );
 });
@@ -48,19 +38,18 @@ router.get( '/:post', function( req, res, next ) {
     if( !req.post ) {
         return res.status(404).hal({});
     }
-    return res.hal( postAssembler.resource( req.post ) );
+    return res.hal( assemble.post.resource( req.post ) );
 });
 
 router.delete( '/:post', function( req, res, next ) {
     if( !req.post ) {
         return res.status(404).hal({});
     }
-    req.post.remove( function( err ) {
-        if ( err ) {
-            return next( err );
+    when( req.post.remove ).then(
+        function( post ) {
+            return res.hal( assemble.post.resource( req.post ) );
         }
-        return res.hal( postAssembler.resource( req.post ) );
-    });
+    ).otherwise( next );
 } );
 
 router.put( '/:post', function( req, res, next ) {
@@ -74,7 +63,7 @@ router.put( '/:post', function( req, res, next ) {
 
     when( req.post.save() ).then(
         function( post ) {
-            return res.hal( postAssembler.resource( post ) );
+            return res.hal( assemble.post.resource( post ) );
         }
     ).otherwise( next );
 });
@@ -90,7 +79,7 @@ router.patch( '/:post', function( req, res, next ) {
 
     when( req.post.save() ).then(
         function( post ) {
-            return res.hal( postAssembler.resource( post ) );
+            return res.hal( assemble.post.resource( post ) );
         }
     ).otherwise( next );
 });

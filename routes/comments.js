@@ -4,14 +4,7 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 var when = require('when');
 var Comment = mongoose.model('Comment');
-var PostAssembler = require('../hal/PostAssembler');
-var CommentAssembler = require('../hal/CommentAssembler');
-var CommentsAssembler = require('../hal/CommentsAssembler');
-
-// Instatiate assemblers
-commentAssembler = new CommentAssembler( '/api/comments' );
-commentsAssembler = new CommentsAssembler( '/api/comments', commentAssembler );
-postAssembler = new PostAssembler( '/api/posts', commentAssembler );
+var assemble = require( './assemble' );
 
 ////
 // Comments
@@ -27,7 +20,7 @@ router.param( 'comment', function(req, res, next, id) {
 router.get( '/', function(req,res,next) {
     when( Comment.find().exec() ).then(
         function( comments ) {
-            return res.hal( commentsAssembler.resource( comments ) );
+            return res.hal( assemble.comments.resource( comments ) );
         }
     ).otherwise( next );
 });
@@ -36,7 +29,7 @@ router.post( '/', function(req, res, next) {
     var comment = new Comment(req.body);
     when( comment.save() ).then(
         function( comment ) {
-            return res.hal( commentAssembler.resource( comment ) );
+            return res.hal( assemble.comment.resource( comment ) );
         }
     ).otherwise( next );
 });
@@ -45,7 +38,7 @@ router.get( '/:comment', function( req, res, next ) {
     if( !req.comment ) {
         return res.status(404).hal({});
     }
-    return res.hal( commentAssembler.resource( req.comment ) );
+    return res.hal( assemble.comment.resource( req.comment ) );
 });
 
 router.delete( '/:comment', function( req, res, next ) {
@@ -54,14 +47,14 @@ router.delete( '/:comment', function( req, res, next ) {
     }
     when( req.comment.remove() ).then(
         function() {
-            return res.hal( commentAssembler.resource( req.comment ) );
+            return res.hal( assemble.comment.resource( req.comment ) );
         }
     ).otherwise( next );
 } );
 
 router.put( '/:comment', function( req, res, next ) {
     if ( !req.comment ) {
-        return res.status(404).json({});
+        return res.status(404).hal({});
     }
     req.comment.title = req.body.title || '';
     req.comment.link = req.body.link || '';
@@ -70,26 +63,25 @@ router.put( '/:comment', function( req, res, next ) {
 
     when( req.comment.save() ).then(
         function( comment ) {
-            return res.hal( commentAssembler.resource( comment ) );
+            return res.hal( assemble.comment.resource( comment ) );
         }
     ).otherwise( next );
 });
 
 router.patch( '/:comment', function( req, res, next ) {
     if ( !req.comment ) {
-        return res.status(404).json({});
+        return res.status(404).hal({});
     }
     req.comment.title = req.body.title || req.comment.title;
     req.comment.link = req.body.link || req.comment.link;
     req.comment.upvotes = _.isFinite( req.body.upvotes ) ? req.body.upvotes : req.comment.upvotes;
     req.comment.comments = req.body.comments || req.comment.comments;
 
-    req.comment.save( function( err, comment ) {
-        if ( err ) {
-            return next( err );
+    when( req.comment.save() ).then(
+        function( comment ) {
+            return res.hal( assemble.comment.resource( comment ) );
         }
-        return res.json( comment );
-    });
+    ).otherwise( next );
 });
 
 module.exports = router;
